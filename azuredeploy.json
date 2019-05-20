@@ -94,7 +94,7 @@
         {
 		"type": "Microsoft.Storage/storageAccounts",
 		"name": "[parameters('StorageAccount')]",
-		"apiVersion": "2016-01-01",
+		"apiVersion": "2018-07-01",
 		"location": "[resourceGroup().location]",
 		"sku": {
 			"name": "Standard_LRS"
@@ -106,7 +106,7 @@
         {
             "type":  "Microsoft.Compute/virtualMachines/extensions",
             "name":  "[concat(parameters('vmName'),'/BGInfo')]",
-            "apiVersion":  "2016-03-30",
+            "apiVersion":  "2018-07-01",
             "location":  "[parameters('location')]",
             "dependsOn":  [
                             "[resourceId('Microsoft.Compute/virtualMachines', parameters('Vmname'))]"
@@ -121,7 +121,7 @@
             "comments":  "VM Extension to display Background Information."
                   },
         {
-            "apiVersion": "2017-12-01",
+            "apiVersion": "2018-07-01",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vmName')]",
             "dependsOn": [
@@ -170,7 +170,7 @@
                 {
                     "type": "Microsoft.Compute/virtualMachines/extensions",
                     "name": "[concat(parameters('VMName'),'/CreateADForest')]",
-                    "apiVersion": "2017-03-30",
+                    "apiVersion": "2018-07-01",
                     "condition": "[equals(parameters('VMName'), 'DC1')]",
 		    "location": "[resourceGroup().location]",
 		    "dependsOn": [
