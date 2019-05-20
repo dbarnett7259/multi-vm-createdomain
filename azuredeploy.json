@@ -99,8 +99,7 @@
 		"sku": {
 			"name": "Standard_LRS"
 			},
-		"kind": "Storage",
-		"properties": {}
+		"Properties": {}
 		},
 	    
         {
