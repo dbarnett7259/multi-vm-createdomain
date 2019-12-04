@@ -85,11 +85,11 @@
 	    },
         "externalDNSForwarder": {
               "type": "string",
+              "defaultValue": "168.63.129.16"
               "metadata": {
                 "description": "DNS forwarder for all non-domain (external) related DNS queries."
               },
-              "defaultValue": "168.63.129.16"
-        }
+	}
      },
     "variables": {
 	    "DomainController": {
@@ -180,7 +180,7 @@
                     "condition": "[equals(parameters('VMName'), 'DC1')]",
 		    "location": "[resourceGroup().location]",
 		    "dependsOn": [
-                        		"[resourceId('Microsoft.Compute/virtualMachines', parameters('VMname'))]"
+                        	"[resourceId('Microsoft.Compute/virtualMachines', parameters('VMname'))]"
                     		],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
