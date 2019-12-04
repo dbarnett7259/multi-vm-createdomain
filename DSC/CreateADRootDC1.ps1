@@ -6,9 +6,6 @@
         [String]$DomainName,
         
         [Parameter(Mandatory)]
-        [String]$DnsForwarder,
-
-        [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$Admincreds
     )
 
@@ -69,9 +66,11 @@
                     Write-Warning "DNS service is not running, cannot edit forwarder. Template deployment will fail."
                     # but continue anyway.
                 }
-                try {
+                $forwarderlist = "168.63.129.16"
+                <#try {
                     Write-Verbose -Verbose "Getting list of DNS forwarders"
-                    $forwarderlist = Get-DnsServerForwarder
+                    $forwarderlist = "168.63.129.16"
+                 <#
                     if ($forwarderlist.IPAddress)
                     { 
                         Write-Verbose -Verbose "Removing forwarders"
@@ -82,9 +81,10 @@
                 } catch {
                     Write-Warning -Verbose "Exception running Remove-DNSServerForwarder: $_"
                 }
+		        #>
                 try {
-                    Write-Verbose -Verbose "setting  forwarder to $($using:DNSForwarder)"
-                    Set-DnsServerForwarder -IPAddress $using:DNSForwarder
+                    Write-Verbose -Verbose "setting DNS forwarder to $forwarderlist"
+                    Set-DnsServerForwarder -IPAddress $forwarderlist -PassThru
                 } catch {
                     Write-Warning -Verbose "Exception running Set-DNSServerForwarder: $_"
                 }
@@ -116,18 +116,18 @@
             DependsOn = "[WindowsFeature]DNS"
         }
 
-        xWaitforDisk Disk2
+        xWaitforDisk Disk0
         {
-            DiskID = 2
+            DiskID = 0
             RetryIntervalSec =$RetryIntervalSec
             RetryCount = $RetryCount
         }
         
         cDiskNoRestart ADDataDisk
         {
-            DiskNumber = 2
-            DriveLetter = "F"
-            DependsOn = "[xWaitForDisk]Disk2"
+            DiskNumber = 0
+            DriveLetter = "C"
+            DependsOn = "[xWaitForDisk]Disk0"
         }
         
         WindowsFeature ADDSInstall
@@ -153,9 +153,9 @@
             DomainName = $DomainName
             DomainAdministratorCredential = $DomainCreds
             SafemodeAdministratorPassword = $DomainCreds
-            DatabasePath = "F:\NTDS"
-            LogPath = "F:\NTDS"
-            SysvolPath = "F:\SYSVOL"
+            DatabasePath = "c:\NTDS"
+            LogPath = "c:\NTDS"
+            SysvolPath = "c:\SYSVOL"
             DependsOn = @("[WindowsFeature]ADDSInstall", "[xDnsServerAddress]DnsServerAddress", "[Script]SetDNSForwarder")
         }
     }
