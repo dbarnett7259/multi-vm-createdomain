@@ -85,11 +85,10 @@
 	    },
         "externalDNSForwarder": {
               "type": "string",
-              "defaultValue": "168.63.129.16"
+              "defaultValue": "168.63.129.16",
               "metadata": {
                 "description": "DNS forwarder for all non-domain (external) related DNS queries."
-              },
-	}
+              }
      },
     "variables": {
 	    "DomainController": {
