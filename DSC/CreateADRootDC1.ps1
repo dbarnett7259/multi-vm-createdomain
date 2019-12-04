@@ -6,7 +6,7 @@ configuration CreateADRootDC1
         [String]$DomainName,
         
         [Parameter(Mandatory)]
-        [String]$DnsForwarder,
+        [String]$ExternalDnsForwarder,
 
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$Admincreds
@@ -83,8 +83,8 @@ configuration CreateADRootDC1
                     Write-Warning -Verbose "Exception running Remove-DNSServerForwarder: $_"
                 }
                 try {
-                    Write-Verbose -Verbose "setting  forwarder to $($using:DNSForwarder)"
-                    Set-DnsServerForwarder -IPAddress $using:DNSForwarder
+                    Write-Verbose -Verbose "setting  forwarder to $($using:ExternalDNSForwarder)"
+                    Set-DnsServerForwarder -IPAddress $using:ExternalDNSForwarder -passthru
                 } catch {
                     Write-Warning -Verbose "Exception running Set-DNSServerForwarder: $_"
                 }
@@ -115,20 +115,6 @@ configuration CreateADRootDC1
             Name = "RSAT-DFS-Mgmt-Con"
             DependsOn = "[WindowsFeature]DNS"
         }
-
-        xWaitforDisk Disk2
-        {
-            DiskID = 2
-            RetryIntervalSec =$RetryIntervalSec
-            RetryCount = $RetryCount
-        }
-        
-        cDiskNoRestart ADDataDisk
-        {
-            DiskNumber = 2
-            DriveLetter = "F"
-            DependsOn = "[xWaitForDisk]Disk2"
-        }
         
         WindowsFeature ADDSInstall
         {
@@ -153,9 +139,9 @@ configuration CreateADRootDC1
             DomainName = $DomainName
             DomainAdministratorCredential = $DomainCreds
             SafemodeAdministratorPassword = $DomainCreds
-            DatabasePath = "F:\NTDS"
-            LogPath = "F:\NTDS"
-            SysvolPath = "F:\SYSVOL"
+            DatabasePath = "C:\NTDS"
+            LogPath = "C:\NTDS"
+            SysvolPath = "C:\SYSVOL"
             DependsOn = @("[WindowsFeature]ADDSInstall", "[xDnsServerAddress]DnsServerAddress", "[Script]SetDNSForwarder")
         }
     }
