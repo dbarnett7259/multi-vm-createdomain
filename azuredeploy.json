@@ -26,7 +26,7 @@
                 "description": "Name of the Virtual Machine"
             }
         },
-	"DomainName": {
+	    "DomainName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the AD Domain"
@@ -89,7 +89,8 @@
               "metadata": {
                 "description": "DNS forwarder for all non-domain (external) related DNS queries."
               }
-     },
+     }
+     }
     "variables": {
 	    "DomainController": {
             	"type": "string",
