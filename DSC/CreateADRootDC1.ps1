@@ -161,7 +161,7 @@
             DriveLetter = 'C'
         }
 
-        PendingReboot AfterMountingDisk
+        xPendingReboot AfterMountingDisk
         {
             Name = 'AfterMountingDisk'
             DependsOn = @('[WindowsFeature]ADDSInstall','[xDisk]DiskC')
@@ -183,16 +183,16 @@
             DomainName = $DomainName
             DomainAdministratorCredential = $DomainCreds
             SafemodeAdministratorPassword = $DomainCreds
-            DatabasePath = "F:\NTDS"
-            LogPath = "F:\NTDS"
-            SysvolPath = "F:\SYSVOL"
-            DependsOn = @("[WindowsFeature]ADDSInstall", "[xDnsServerAddress]DnsServerAddress", "[Script]SetDNSForwarder", "[PendingReboot]AfterMountingDisk")
+            DatabasePath = "c:\NTDS"
+            LogPath = "c:\NTDS"
+            SysvolPath = "c:\SYSVOL"
+            DependsOn = @("[WindowsFeature]ADDSInstall", "[xDnsServerAddress]DnsServerAddress", "[Script]SetDNSForwarder", "[xPendingReboot]AfterMountingDisk")
         }
         
         #
         # Force the reboot; the automatic reboot stopped working somewhere in 2019... 
         #
-        PendingReboot RebootAfterInstallingAD
+        xPendingReboot RebootAfterInstallingAD
         {
             Name = 'RebootAfterInstallingAD'
             DependsOn = "[xADDomain]FirstDS"
