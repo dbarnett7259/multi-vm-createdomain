@@ -83,7 +83,7 @@
                     "description": "Time Zone"
                 }
 	    },
-        "externalDNSForwarder": {
+        "DNSForwarder": {
               "type": "string",
               "defaultValue": "168.63.129.16",
               "metadata": {
@@ -179,8 +179,8 @@
                     "name": "[concat(parameters('VMName'),'/CreateADForest')]",
                     "apiVersion": "2019-03-01",
                     "condition": "[equals(parameters('VMName'), 'DC1')]",
-		    "location": "[resourceGroup().location]",
-		    "dependsOn": [
+		            "location": "[resourceGroup().location]",
+		            "dependsOn": [
                         	"[resourceId('Microsoft.Compute/virtualMachines', parameters('VMname'))]"
                     		],
                     "properties": {
@@ -193,18 +193,16 @@
                             "ConfigurationFunction": "CreateADRootDC1.ps1\\CreateADRootDC1",
                             "Properties": {
                                 "DomainName": "[parameters('domainName')]",
-                                "AdminCreds": {
-                                    "UserName": "[parameters('adminUsername')]",
-                                    "Password": "[parameters('adminPassword')]"
-                                },
-				 "ExternalDNSForwarder": {
-				    "value": "[parameters('externalDNSForwarder')]"
+          			            "DnsForwarder": "[parameters('DnsForwarder')]",
+          			            "AdminCreds": {
+            				        "UserName": "[parameters('adminUserName')]",
+            				        "Password": "PrivateSettingsRef:AdminPassword"
                                 }
-                            }
+				            }
                         },
                         "protectedSettings": {
                             "Items": {
-                                "AdminPassword": "[parameters('adminPassword')]"
+                                "AdminPassword": "[parameters('AdminPassword')]"
                             }
                         }
 		    }
