@@ -193,7 +193,7 @@
                             "ConfigurationFunction": "CreateADRootDC1.ps1\\CreateADRootDC1",
                             "Properties": {
                                 "DomainName": "[parameters('domainName')]",
-          			            "DnsForwarder": "[parameters('DnsForwarder')]",
+          			            "ExternalDnsForwarder": "[parameters('DnsForwarder')]",
           			            "AdminCreds": {
             				        "UserName": "[parameters('adminUserName')]",
             				        "Password": "PrivateSettingsRef:AdminPassword"
