@@ -12,7 +12,7 @@
         [System.Management.Automation.PSCredential]$Admincreds
     )
 
-    Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, cDisk
+    Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, xDisk
     
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
     $Interface = Get-NetAdapter | Where-Object Name -Like "Ethernet*" | Select-Object -First 1
@@ -115,7 +115,7 @@
             Name = "RSAT-DFS-Mgmt-Con"
             DependsOn = "[WindowsFeature]DNS"
         }
-
+<#
         xWaitforDisk Disk2
         {
             DiskID = 2
@@ -129,12 +129,12 @@
             DriveLetter = "F"
             DependsOn = "[xWaitForDisk]Disk2"
         }
-        
+  #>      
         WindowsFeature ADDSInstall
         {
             Ensure = "Present"
             Name = "AD-Domain-Services"
-            DependsOn = "[cDiskNoRestart]ADDataDisk"
+            #DependsOn = "[cDiskNoRestart]ADDataDisk"
         }
 
         #
