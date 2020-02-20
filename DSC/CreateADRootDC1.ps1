@@ -12,7 +12,7 @@
         [System.Management.Automation.PSCredential]$Admincreds
     )
 
-    Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, xDisk
+    Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, cDisk
     
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
     $Interface = Get-NetAdapter | Where-Object Name -Like "Ethernet*" | Select-Object -First 1
