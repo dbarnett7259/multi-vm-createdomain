@@ -83,7 +83,7 @@
                     "description": "Time Zone"
                 }
 	    },
-        "externalDNSForwarder": {
+        "DNSForwarder": {
               "type": "string",
               "metadata": {
                 "description": "DNS forwarder for all non-domain (external) related DNS queries."
@@ -197,7 +197,7 @@
                                     "Password": "PrivateSettingsRef:AdminPassword"
                                 },
 				    "DNSForwarder": {
-				    "value": "[parameters('externalDNSForwarder')]"
+				    "value": "[parameters('DNSForwarder')]"
                                 }
                             }
                         },
