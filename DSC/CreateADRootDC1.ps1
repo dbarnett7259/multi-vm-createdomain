@@ -1,4 +1,4 @@
-configuration CreateADRootDC1
+﻿configuration CreateADRootDC1
 {
    param
    (
