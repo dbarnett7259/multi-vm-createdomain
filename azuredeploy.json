@@ -83,14 +83,7 @@
                     "description": "Time Zone"
                 }
 	    },
-        "DNSForwarder": {
-              "type": "string",
-              "metadata": {
-                "description": "DNS forwarder for all non-domain (external) related DNS queries."
-              },
-              "defaultValue": "168.63.129.16"
-        }
-     },
+    },
     "variables": {
 	    "DomainController": {
             	"type": "string",
@@ -195,11 +188,7 @@
                                 "AdminCreds": {
                                     "UserName": "[parameters('adminUsername')]",
                                     "Password": "PrivateSettingsRef:AdminPassword"
-                                },
-				    "DNSForwarder": {
-				    "value": "[parameters('DNSForwarder')]"
-                                }
-                            }
+                                          }
                         },
                         "protectedSettings": {
                             "Items": {
