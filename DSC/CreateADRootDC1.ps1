@@ -1,4 +1,4 @@
-﻿configuration CreateADRootDC1
+configuration CreateADRootDC1
 {
    param
    (
@@ -8,10 +8,10 @@
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$Admincreds
     )
-
+    $password = $($Admincreds.Password) | ConvertTo-SecureString -asPlainText -Force
     Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking
     
-    [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
+    [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $password)
     $Interface = Get-NetAdapter | Where-Object Name -Like "Ethernet*" | Select-Object -First 1
     $InterfaceAlias = $($Interface.Name)
 
