@@ -1,4 +1,4 @@
-﻿configuration CreateADPDC 
+﻿configuration CreateADRootDC1 
 { 
    param 
    ( 
