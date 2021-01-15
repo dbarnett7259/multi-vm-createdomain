@@ -15,8 +15,8 @@
     Import-DscResource -ModuleName xNetworking
     Import-DscResource -ModuleName xPendingReboot
     Import-DscResource -ModuleName PSDesiredStateConfiguration -ModuleVersion 2.0.5
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration
     Import-DscResource -ModuleName xDnsServer
-    Import-DscResource -ModuleName xADRecycleBin
      
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
     $Interface=Get-NetAdapter|Where Name -Like "Ethernet*"|Select-Object -First 1
@@ -85,7 +85,7 @@
             DependsOn = "[WindowsFeature]ADDSInstall"
         }
          
-        xADDomain FirstDS 
+        xADDomain DC1 
         {
             DomainName = $DomainName
             DomainAdministratorCredential = $DomainCreds
@@ -95,6 +95,15 @@
             SysvolPath = "C:\SYSVOL"
 	        DependsOn = @("[WindowsFeature]ADDSInstall")
         }
+         
+         xWaitForADDomain DC1Forest
+        {
+            DomainName           = $DomainName
+            DomainUserCredential = $DomainCreds
+            RetryCount           = $RetryCount
+            RetryIntervalSec     = $RetryIntervalSec
+            DependsOn            = "[xADDomain]DC1"
+        } 
         
         xADRecycleBin RecycleBin
         {
