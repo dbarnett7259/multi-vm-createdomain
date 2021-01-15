@@ -21,7 +21,7 @@
         LocalConfigurationManager 
         {
             RefreshMode = 'Push'
-            ActionAfterReboot = 'continue'
+            ActionAfterReboot = 'continueConfiguration'
             RebootNodeIfNeeded = $true
         }
 
