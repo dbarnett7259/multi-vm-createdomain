@@ -21,8 +21,6 @@
         LocalConfigurationManager 
         {
             RebootNodeIfNeeded = $true
-            PSDscAllowDomainUser = $true
-            PsDscAllowPlainTextPassword = $true
         }
 
          
