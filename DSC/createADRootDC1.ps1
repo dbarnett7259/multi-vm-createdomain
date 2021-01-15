@@ -118,7 +118,8 @@
             TestScript = { Get-DnsClientServerAddress -InterfaceAlias Ethernet* -AddressFamily IPV4 | 
                     Foreach { ! ($_.ServerAddresses -contains '127.0.0.1') } }
         }
-        xPendingReboot
+
+        xPendingReboot RebootDC
         {
             Name = "RebootforDCPromo"
             DependsOn = '[Script]ResetDNS'
