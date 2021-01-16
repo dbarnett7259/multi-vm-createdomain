@@ -7,11 +7,7 @@ Configuration CreateADRootDC1_v2
         [Int]$RetryIntervalSec = 120
     )
 
-    Import-DscResource -ModuleName PSDesiredStateConfiguration -ModuleVersion 2.0.5
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration
-    Import-DscResource -ModuleName xActiveDirectory 
-    Import-DscResource -ModuleName xPendingReboot 
-    Import-DscResource -ModuleName xDnsServer
+    Import-DscResource -ModuleName xActiveDirectory, xNetworking, PSDesiredStateConfiguration, xPendingReboot
 
     Function IIf
     {
