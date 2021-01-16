@@ -62,7 +62,7 @@
         { 
             Ensure = "Present" 
             Name = "AD-Domain-Services"
-	        DependsOn="[WindowsFeature]DNS" 
+	    DependsOn="[WindowsFeature]DNS" 
         } 
 
         WindowsFeature ADDSTools
@@ -87,7 +87,7 @@
             DatabasePath = "C:\NTDS"
             LogPath = "C:\NTDS"
             SysvolPath = "C:\SYSVOL"
-	        DependsOn = @("[WindowsFeature]ADDSInstall")
+	    DependsOn = @("[WindowsFeature]ADDSInstall")
         }
          
          xWaitForADDomain DC1Forest
