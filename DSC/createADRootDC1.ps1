@@ -1,4 +1,128 @@
-﻿configuration CreateADRootDC1 
+Configuration CreateADRootDC1_v2
+{
+    Param ( 
+        [String]$DomainName,
+        [PSCredential]$AdminCreds,
+        [Int]$RetryCount = 30,
+        [Int]$RetryIntervalSec = 120
+    )
+
+    Import-DscResource -ModuleName PSDesiredStateConfiguration -ModuleVersion 2.0.5
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration
+    Import-DscResource -ModuleName xActiveDirectory 
+    Import-DscResource -ModuleName xPendingReboot 
+    Import-DscResource -ModuleName xDnsServer
+
+    Function IIf
+    {
+        param($If, $IfTrue, $IfFalse)
+        
+        If ($If -IsNot "Boolean") { $_ = $If }
+        If ($If) { If ($IfTrue -is "ScriptBlock") { &$IfTrue } Else { $IfTrue } }
+        Else { If ($IfFalse -is "ScriptBlock") { &$IfFalse } Else { $IfFalse } }
+    }
+
+    $NetBios = $(($DomainName -split '\.')[0])
+    [PSCredential]$DomainCreds = [PSCredential]::New($NetBios + '\' + $(($AdminCreds.UserName -split '\\')[-1]), $AdminCreds.Password)
+
+    $credlookup = @{
+        "localadmin"  = $AdminCreds
+        "DomainCreds" = $DomainCreds
+        "DomainJoin"  = $DomainCreds
+        }
+    
+    Node localhost
+    {
+        LocalConfigurationManager
+        {
+            ActionAfterReboot    = 'ContinueConfiguration'
+            ConfigurationMode    = 'ApplyAndMonitor'
+            RebootNodeIfNeeded   = $true
+            AllowModuleOverWrite = $true
+        }
+
+        WindowsFeature InstallADDS
+        {            
+            Ensure = "Present"
+            Name   = "AD-Domain-Services"
+        }
+
+        #-------------------------------------------------------------------
+        foreach ($Feature in $Node.WindowsFeaturePresent)
+        {
+            WindowsFeature $Feature
+            {
+                Name                 = $Feature
+                Ensure               = 'Present'
+                IncludeAllSubFeature = $true
+                #Source = $ConfigurationData.NonNodeData.WindowsFeatureSource
+            }
+            $dependsonFeatures += @("[WindowsFeature]$Feature")
+        }
+
+        #-------------------------------------------------------------------
+        if ($Node.WindowsFeatureSetAbsent)
+        {
+            WindowsFeatureSet WindowsFeatureSetAbsent
+            {
+                Ensure = 'Absent'
+                Name   = $Node.WindowsFeatureSetAbsent
+            }
+        }
+
+        xADDomain DC1
+        {
+            DomainName                    = $DomainName
+            DomainAdministratorCredential = $DomainCreds
+            SafemodeAdministratorPassword = $DomainCreds
+            DatabasePath                  = 'C:\NTDS'
+            LogPath                       = 'C:\NTDS'
+            SysvolPath                    = 'C:\SYSVOL'
+            DependsOn                     = "[WindowsFeature]InstallADDS"
+        }
+
+        xWaitForADDomain DC1Forest
+        {
+            DomainName           = $DomainName
+            DomainUserCredential = $DomainCreds
+            RetryCount           = $RetryCount
+            RetryIntervalSec     = $RetryIntervalSec
+            DependsOn            = "[xADDomain]DC1"
+        } 
+
+        xADRecycleBin RecycleBin
+        {
+            EnterpriseAdministratorCredential = $DomainCreds
+            ForestFQDN                        = $DomainName
+            DependsOn                         = '[xWaitForADDomain]DC1Forest'
+        }
+
+        # when the DC is promoted the DNS (static server IP's) are automatically set to localhost (127.0.0.1 and ::1) by DNS
+        # I have to remove those static entries and just use the Azure Settings for DNS from DHCP
+        Script ResetDNS
+        {
+            DependsOn  = '[xADRecycleBin]RecycleBin'
+            GetScript  = { @{Name = 'DNSServers'; Address = { Get-DnsClientServerAddress -InterfaceAlias Ethernet* | foreach ServerAddresses } } }
+            SetScript  = { Set-DnsClientServerAddress -InterfaceAlias Ethernet* -ResetServerAddresses -Verbose }
+            TestScript = { Get-DnsClientServerAddress -InterfaceAlias Ethernet* -AddressFamily IPV4 | 
+                    Foreach { ! ($_.ServerAddresses -contains '127.0.0.1') } }
+        }
+
+        #-------------------
+        	
+        # Need to make sure the DC reboots after it is promoted.
+        xPendingReboot RebootForPromo
+        {
+            Name      = 'RebootForDJoin'
+            DependsOn = '[Script]ResetDNS'
+        }
+
+     }
+}#Main
+
+
+<# OLD CONFIG SCRIPT
+configuration CreateADRootDC1 
 { 
    param 
    ( 
@@ -21,9 +145,10 @@
     {
         LocalConfigurationManager 
         {
-            RefreshMode = 'Push'
-            ActionAfterReboot = 'continueConfiguration'
-            RebootNodeIfNeeded = $true
+            ActionAfterReboot    = 'ContinueConfiguration'
+            ConfigurationMode    = 'ApplyAndMonitor'
+            RebootNodeIfNeeded   = $true
+            AllowModuleOverWrite = $true
         }
                  
 	    WindowsFeature DNS 
@@ -126,3 +251,4 @@
         }
    }
 } 
+#>
