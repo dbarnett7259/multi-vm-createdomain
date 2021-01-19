@@ -1,4 +1,4 @@
-Configuration CreateADRootDC1_v2
+﻿Configuration CreateADRootDC1_v2
 {
     Param ( 
         [String]$DomainName,
@@ -78,7 +78,7 @@ Configuration CreateADRootDC1_v2
         xADDomain DC1
         {
             DomainName                    = $DomainName
-            DomainAdministratorCredential = $DomainCreds
+            DomainAdministratorCredential = $DomainCreds.UserName
             SafemodeAdministratorPassword = $DomainCreds
             DatabasePath                  = 'C:\NTDS'
             LogPath                       = 'C:\NTDS'
@@ -89,7 +89,7 @@ Configuration CreateADRootDC1_v2
         xWaitForADDomain DC1Forest
         {
             DomainName           = $DomainName
-            DomainUserCredential = $DomainCreds
+            DomainUserCredential = $DomainCreds.UserName
             RetryCount           = $RetryCount
             RetryIntervalSec     = $RetryIntervalSec
             DependsOn            = "[xADDomain]DC1"
