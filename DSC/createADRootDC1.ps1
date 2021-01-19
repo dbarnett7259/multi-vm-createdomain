@@ -8,7 +8,20 @@ Configuration CreateADRootDC1_v2
     )
 
     Import-DscResource -ModuleName xActiveDirectory, xNetworking, PSDesiredStateConfiguration, xPendingReboot
-
+    
+    $ConfigurationData = @{
+    AllNodes = @(
+        @{
+            NodeName = 'localhost'
+            PSDscAllowPlainTextPassword = $true
+            PsDscAllowDomainUser = $true
+            ZipFile = "C:\Users\grave\Desktop\DSC Example\Work\master.zip"
+            WorkFolder = "C:\Users\grave\Desktop\DSC Example\Work"
+            ExtractedFolder = "C:\Users\grave\Desktop\DSC Example\Work\extracted"
+            DownloadUri = "https://github.com/Atheuz/Falcon-Case/archive/master.zip"
+        })
+    }
+    
     Function IIf
     {
         param($If, $IfTrue, $IfFalse)
