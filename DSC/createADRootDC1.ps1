@@ -84,19 +84,19 @@
             SysvolPath                    = 'C:\SYSVOL'
             DependsOn                     = "[WindowsFeature]InstallADDS"
         }
-
-        xADRecycleBin RecycleBin
+<#
+       xADRecycleBin RecycleBin
         {
             EnterpriseAdministratorCredential = $DomainCreds
             ForestFQDN                        = $DomainName
             DependsOn                         = "[xADDomain]DC1"
         }
-
+        #>
         # when the DC is promoted the DNS (static server IP's) are automatically set to localhost (127.0.0.1 and ::1) by DNS
         # I have to remove those static entries and just use the Azure Settings for DNS from DHCP
         Script ResetDNS
         {
-            DependsOn  = '[xADRecycleBin]RecycleBin'
+            DependsOn  = "[WindowsFeature]InstallADDS"
             GetScript  = { @{Name = 'DNSServers'; Address = { Get-DnsClientServerAddress -InterfaceAlias Ethernet* | foreach ServerAddresses } } }
             SetScript  = { Set-DnsClientServerAddress -InterfaceAlias Ethernet* -ResetServerAddresses -Verbose }
             TestScript = { Get-DnsClientServerAddress -InterfaceAlias Ethernet* -AddressFamily IPV4 | 
