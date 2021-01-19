@@ -15,10 +15,6 @@ Configuration CreateADRootDC1_v2
             NodeName = 'localhost'
             PSDscAllowPlainTextPassword = $true
             PsDscAllowDomainUser = $true
-            ZipFile = "C:\Users\grave\Desktop\DSC Example\Work\master.zip"
-            WorkFolder = "C:\Users\grave\Desktop\DSC Example\Work"
-            ExtractedFolder = "C:\Users\grave\Desktop\DSC Example\Work\extracted"
-            DownloadUri = "https://github.com/Atheuz/Falcon-Case/archive/master.zip"
         })
     }
     
