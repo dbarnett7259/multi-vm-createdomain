@@ -27,8 +27,7 @@
         Else { If ($IfFalse -is "ScriptBlock") { &$IfFalse } Else { $IfFalse } }
     }
 
-    $NetBios = $(($DomainName -split '\.')[0])
-    [PSCredential]$DomainCreds = [PSCredential]::New($NetBios + '\' + $(($AdminCreds.UserName -split '\\')[-1]), $AdminCreds.Password)
+    [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
 
     $credlookup = @{
         "localadmin"  = $AdminCreds
@@ -78,7 +77,7 @@
         xADDomain DC1
         {
             DomainName                    = $DomainName
-            DomainAdministratorCredential = $DomainCreds.UserName
+            DomainAdministratorCredential = $DomainCreds
             SafemodeAdministratorPassword = $DomainCreds
             DatabasePath                  = 'C:\NTDS'
             LogPath                       = 'C:\NTDS'
@@ -89,7 +88,7 @@
         xWaitForADDomain DC1Forest
         {
             DomainName           = $DomainName
-            DomainUserCredential = $DomainCreds.UserName
+            DomainUserCredential = $DomainCreds
             RetryCount           = $RetryCount
             RetryIntervalSec     = $RetryIntervalSec
             DependsOn            = "[xADDomain]DC1"
