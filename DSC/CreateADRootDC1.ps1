@@ -87,7 +87,7 @@
             DependsOn = "[WindowsFeature]DNS"
         }
    
-        WindowsFeature ADDSInstall
+        WindowsFeature InstallADDS
         {
             Ensure = "Present"
             Name = "AD-Domain-Services"
