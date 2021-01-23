@@ -1,4 +1,4 @@
-﻿﻿Configuration CreateADRootDC1
+﻿Configuration CreateADRootDC1
 {
     Param ( 
         [String]$DomainName,
