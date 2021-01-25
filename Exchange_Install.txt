@@ -1,6 +1,5 @@
 <#
-# Auto detect text files and perform LF normalization
-* text=auto
+
 ###### Instructions for installing Exchange 2019 ######
 
 Login to your Visual Studio subscription from your Exchange Virtual Machine with this URL:
