@@ -1,0 +1,6 @@
+<#
+###### Instructions for installing Exchange 2019 ######
+Login to your Visual Studio subscription from your Exchange Virtual Machine with this URL:
+https://my.visualstudio.com/Downloads/Featured?mkt=en-us
+search for Exchange 2019 and download the latest CU and product key
+#>
