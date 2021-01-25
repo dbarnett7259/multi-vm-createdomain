@@ -60,7 +60,7 @@
         },
         "osSku": {
             "type": "string",
-            "defaultValue": "2016-Datacenter",
+            "defaultValue": "2019-Datacenter",
             "metadata": {
                 "description": "OS sku for VM"
             }
@@ -184,7 +184,7 @@
                         "settings": {
                             "wmfVersion": "latest",
 			    "configuration": {
-				     "Url": "[concat(parameters('artifactsLocation'), '/createdomain_v4-2/DSC/CreateADRootDC1.ps1.zip', parameters('artifactsLocationSasToken'))]",
+				     "Url": "[concat(parameters('artifactsLocation'), '/createdomain_v4-3/DSC/CreateADRootDC1.ps1.zip', parameters('artifactsLocationSasToken'))]",
 				    "script": "CreateADRootDC1.ps1",
 				    "function": "CreateADRootDC1"
 			    },
