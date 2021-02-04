@@ -35,7 +35,6 @@
             ConfigurationMode    = 'ApplyAndMonitor'
             RebootNodeIfNeeded   = $true
             AllowModuleOverWrite = $true
-            psdscallowplaintextpassword = $true
         }
 
           WindowsFeature DNS
