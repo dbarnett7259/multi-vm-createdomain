@@ -1,4 +1,4 @@
-﻿Configuration CreateADRootDC1
+Configuration CreateADRootDC1
 {
     Param ( 
         [String]$DomainName,
@@ -7,7 +7,7 @@
         [Int]$RetryIntervalSec = 120
     )
 
-    Import-DscResource -ModuleName xActiveDirectory, xNetworking, PSDesiredStateConfiguration, xPendingReboot
+    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PSDesiredStateConfiguration, PendingReboot
 
     Function IIf
     {
@@ -109,10 +109,10 @@
 
         #-------------------------------------------------------------------
         
-        xADDomain DC1
+        ADDomain DC1
         {
             DomainName                    = $DomainName
-            DomainAdministratorCredential = $DomainCreds
+            Credential                    = $DomainCreds
             SafemodeAdministratorPassword = $DomainCreds
             DatabasePath                  = 'C:\NTDS'
             LogPath                       = 'C:\NTDS'
@@ -140,7 +140,7 @@
         #-------------------
         	
         # Need to make sure the DC reboots after it is promoted.
-        xPendingReboot RebootForPromo
+        PendingReboot RebootForPromo
         {
             Name      = 'RebootForDJoin'
             DependsOn = '[Script]ResetDNS'
