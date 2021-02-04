@@ -7,7 +7,7 @@ Configuration CreateADRootDC1
         [Int]$RetryIntervalSec = 120
     )
 
-    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PSDesiredStateConfiguration, PendingReboot
+    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PSDesiredStateConfiguration, xPendingReboot
 
     Function IIf
     {
@@ -140,7 +140,7 @@ Configuration CreateADRootDC1
         #-------------------
         	
         # Need to make sure the DC reboots after it is promoted.
-        PendingReboot RebootForPromo
+        xPendingReboot RebootForPromo
         {
             Name      = 'RebootForDJoin'
             DependsOn = '[Script]ResetDNS'
