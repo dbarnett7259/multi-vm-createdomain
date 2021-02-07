@@ -184,9 +184,9 @@
                         "settings": {
                             "wmfVersion": "latest",
 			    "configuration": {
-				     "Url": "[concat(parameters('artifactsLocation'), '/createdomain_v4-3/DSC/CreateADRootDC1.ps1.zip', parameters('artifactsLocationSasToken'))]",
-				    "script": "CreateADRootDC1.ps1",
-				    "function": "CreateADRootDC1"
+				     "Url": "[concat(parameters('artifactsLocation'), '/createdomain_v4-3/DSC/CreateADRootDC1_v2.ps1.zip', parameters('artifactsLocationSasToken'))]",
+				    "script": "CreateADRootDC1_v2.ps1",
+				    "function": "CreateADRootDC1_v2"
 			    },
 			    "ConfigurationArguments": {
                                 "DomainName": "[parameters('domainName')]",
