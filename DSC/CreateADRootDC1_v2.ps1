@@ -1,4 +1,4 @@
-Configuration CreateADRootDC1_v2
+﻿Configuration CreateADRootDC1_v2
 {
     Param ( 
         [String]$DomainName,
@@ -8,7 +8,7 @@ Configuration CreateADRootDC1_v2
         [Int]$RetryIntervalSec = 120
     )
 
-    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PendingReboot, computermanagementDSC, PSDesiredStateConfiguration
+    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PendingReboot, computermanagementDSC #, PSDesiredStateConfiguration
 
 
     Function IIf
