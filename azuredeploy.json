@@ -207,15 +207,14 @@
                                     "Password": "PrivateSettingsRef:AdminPassword"
                                 },
 				"SafeModeAdminCreds": {
-				     "UserName": "[parameters('safemodeAdminUserName')]",
-                        	     "Password": "PrivateSettingsRef:SafeModeAdminPassword"
+				     "Password": "PrivateSettingsRef:SafeModeAdminPassword"
                    		}
                             }
                         },
                         "protectedSettings": {
                             "Items": {
                                 "AdminPassword": "[parameters('adminPassword')]"
-				"SafeModeAdminPassword": "[parameters('safemodeadminPassword')]"
+				"SafeModeAdminPassword": "[parameters('SafemodeAdminPassword')]"
                             }
                         }
 		    }
