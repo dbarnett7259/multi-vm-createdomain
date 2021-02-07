@@ -207,7 +207,7 @@
                         },
                         "protectedSettings": {
                             "Items": {
-                                "AdminPassword": "[parameters('adminPassword')]"
+                                "AdminPassword": "[parameters('adminPassword')]",
 				"SafeModeAdminPassword": "[parameters('SafeModeAdminPassword')]"
                             }
                         }
