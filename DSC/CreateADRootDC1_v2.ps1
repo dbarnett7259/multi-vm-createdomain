@@ -1,13 +1,15 @@
-﻿Configuration CreateADRootDC1_v2
+Configuration CreateADRootDC1_v2
 {
     Param ( 
         [String]$DomainName,
-        [PSCredential]$AdminCreds,
+        [System.Management.Automation.PSCredential]$AdminCreds,
+        [System.Management.Automation.PSCredential]$AdminSafemodeCreds,
         [Int]$RetryCount = 30,
         [Int]$RetryIntervalSec = 120
     )
 
-    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PSDesiredStateConfiguration, PendingReboot, computermanagementDSC
+    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PendingReboot, computermanagementDSC
+    Import-Module PSDesiredStateConfiguration -Force
 
 
     Function IIf
@@ -21,7 +23,7 @@
 
     $NetBios = $(($DomainName -split '\.')[0])
     [PSCredential]$DomainCreds = [PSCredential]::New($NetBios + '\' + $(($AdminCreds.UserName -split '\\')[-1]), $AdminCreds.Password)
-
+    
     $credlookup = @{
         "localadmin"  = $AdminCreds
         "DomainCreds" = $DomainCreds
@@ -114,12 +116,13 @@
         {
             DomainName = $DomainName
 			Credential = $DomainCreds
-			SafemodeAdministratorPassword = $DomainCreds
-			ForestMode = 'Win2012R2'
+			SafemodeAdministratorPassword = $SafemodeCreds
 			DatabasePath = 'C:\Windows\NTDS'
 			LogPath = 'C:\Windows\NTDS'
 			SysvolPath = 'C:\Windows\SYSVOL'
-			DependsOn = '[WindowsFeature]InstallADDS'
+			DomainNetbiosName = $DomainName.Split('.')[0]
+            DependsOn = '[WindowsFeature]InstallADDS'
+            
         }
         
         <#ADForestProperties ForestProps
@@ -320,15 +323,6 @@
             TestScript = { Get-DnsClientServerAddress -InterfaceAlias Ethernet* -AddressFamily IPV4 | 
                     Foreach { ! ($_.ServerAddresses -contains '127.0.0.1') } }
         }
-
-        #-------------------
         	
-        # Need to make sure the DC reboots after it is promoted.
-        PendingReboot RebootForPromo
-        {
-            Name      = 'RebootForDJoin'
-            DependsOn = '[Script]ResetDNS'
-        }
-
      }
 }
