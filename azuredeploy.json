@@ -201,7 +201,7 @@
                                     "Password": "PrivateSettingsRef:AdminPassword"
                                 },
 				"SafeModeAdminCreds": {
-				     "UserName": "[parameters('adminUsername')]"
+				     "UserName": "[parameters('adminUsername')]",
 				     "Password": "PrivateSettingsRef:SafeModeAdminPassword"
                    		}
                             }
