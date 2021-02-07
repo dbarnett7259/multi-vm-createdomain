@@ -3,7 +3,6 @@
     Param ( 
         [String]$DomainName,
         [PSCredential]$AdminCreds,
-        [pscredential]$SafeModeAdminCreds,
         [Int]$RetryCount = 30,
         [Int]$RetryIntervalSec = 120
     )
@@ -115,7 +114,7 @@
         {
             DomainName = $DomainName
 			Credential = $DomainCreds
-			SafemodeAdministratorPassword = $SafeModeAdminCreds
+			SafemodeAdministratorPassword = $DomainCreds
 			DatabasePath = 'C:\Windows\NTDS'
 			LogPath = 'C:\Windows\NTDS'
 			SysvolPath = 'C:\Windows\SYSVOL'
