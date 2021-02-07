@@ -44,19 +44,7 @@
                 "description": "Admin user password for virtual machine"
             }
         },
-       	"SafeModeAdminUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "User name for Safe Mode Domain Controller (this is never used but is required)"
-            }
-        },
-	"SafeModeAdminPassword": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Admin user password for Safe Mode Domain Controller"
-            }
-        },
-	    "vmSize": {
+       	"vmSize": {
             "type": "string",
             "metadata": {
                 "description": "Size of VM"
@@ -206,17 +194,12 @@
                                     "UserName": "[parameters('adminUsername')]",
                                     "Password": "PrivateSettingsRef:AdminPassword"
                                 },
-				"SafeModeAdminCreds": {
-				     "UserName": "[parameters('SafeModeAdminUsername')]",
-				     "Password": "PrivateSettingsRef:SafeModeAdminPassword"
-                   		}
-                            }
+			    }
                         },
                         "protectedSettings": {
                             "Items": {
-                                "AdminPassword": "[parameters('adminPassword')]",
-				"SafeModeAdminPassword": "[parameters('SafeModeAdminPassword')]"
-                            }
+                                "AdminPassword": "[parameters('adminPassword')]"
+				}
                         }
 		    }
                 }
