@@ -44,13 +44,7 @@
                 "description": "Admin user password for virtual machine"
             }
         },
-        "SafeModeAdminUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "Safe Mode Admin Name user name for the Domain Controller"
-            }
-        },
-	"SafeModeAdminPassword": {
+       	"SafeModeAdminPassword": {
             "type": "securestring",
             "metadata": {
                 "description": "Admin user password for Safe Mode Domain Controller"
