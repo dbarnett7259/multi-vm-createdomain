@@ -8,8 +8,7 @@ Configuration CreateADRootDC1_v2
         [Int]$RetryIntervalSec = 120
     )
 
-    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PendingReboot, computermanagementDSC
-    Import-Module PSDesiredStateConfiguration -Force
+    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PendingReboot, computermanagementDSC, PSDesiredStateConfiguration
 
 
     Function IIf
