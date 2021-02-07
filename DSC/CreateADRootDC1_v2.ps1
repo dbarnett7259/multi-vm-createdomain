@@ -1,4 +1,4 @@
-﻿Configuration CreateADRootDC1
+﻿Configuration CreateADRootDC1_v2
 {
     Param ( 
         [String]$DomainName,
@@ -7,7 +7,7 @@
         [Int]$RetryIntervalSec = 120
     )
 
-    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PSDesiredStateConfiguration, xPendingReboot, computermanagementDSC
+    Import-DscResource -ModuleName ActiveDirectoryDSC, NetworkingDSC, PSDesiredStateConfiguration, PendingReboot, computermanagementDSC
 
 
     Function IIf
@@ -242,29 +242,7 @@
 			DependsOn = '[ADDomain]DC1'
         }
 
-        ADGroup DomainAdmins
-		{
-			GroupName = 'Domain Admins'
-			Category = 'Security'
-			GroupScope = 'Global'
-			MembershipAttribute = 'SamAccountName'
-			MembersToInclude = "SamiraA"
-			Ensure = 'Present'
-			DependsOn = '[ADDomain]DC1'
-		}
-
-		ADGroup EnterpriseAdmins
-		{
-			GroupName = 'Enterprise Admins'
-			Category = 'Security'
-			GroupScope = 'Universal'
-			MembershipAttribute = 'SamAccountName'
-			MembersToInclude = ""
-			Ensure = 'Present'
-			DependsOn = '[ADDomain]DC1'
-		}
-
-		#region Enable TLS1.2
+        #region Enable TLS1.2
         # REF: https://support.microsoft.com/en-us/help/3140245/update-to-enable-tls-1-1-and-tls-1-2-as-default-secure-protocols-in-wi
         # Enable TLS 1.2 SChannel
         Registry EnableTls12ServerEnabled
@@ -331,27 +309,12 @@
 
 
 		#region COE
-		Registry DisableSmartScreen
-        {
-            Key = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer'
-            ValueName = 'SmartScreenEnable'
-            ValueType = 'String'
-            ValueData = 'Off'
-            Ensure = 'Present'
-			Force = $true
-			DependsOn = '[ADDomain]DC1'
-        }
-      <#  xADRecycleBin RecycleBin
-        {
-            EnterpriseAdministratorCredential = $DomainCreds
-            ForestFQDN                        = $DomainName
-        }
-#>
+		
         # when the DC is promoted the DNS (static server IP's) are automatically set to localhost (127.0.0.1 and ::1) by DNS
         # I have to remove those static entries and just use the Azure Settings for DNS from DHCP
         Script ResetDNS
         {
-            #DependsOn  = '[xADRecycleBin]RecycleBin'
+            DependsOn = '[ADDomain]DC1'
             GetScript  = { @{Name = 'DNSServers'; Address = { Get-DnsClientServerAddress -InterfaceAlias Ethernet* | foreach ServerAddresses } } }
             SetScript  = { Set-DnsClientServerAddress -InterfaceAlias Ethernet* -ResetServerAddresses -Verbose }
             TestScript = { Get-DnsClientServerAddress -InterfaceAlias Ethernet* -AddressFamily IPV4 | 
@@ -361,7 +324,7 @@
         #-------------------
         	
         # Need to make sure the DC reboots after it is promoted.
-        xPendingReboot RebootForPromo
+        PendingReboot RebootForPromo
         {
             Name      = 'RebootForDJoin'
             DependsOn = '[Script]ResetDNS'
