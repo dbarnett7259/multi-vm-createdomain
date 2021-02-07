@@ -44,7 +44,13 @@
                 "description": "Admin user password for virtual machine"
             }
         },
-       	"SafeModeAdminPassword": {
+       	"SafeModeUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "User name for Safe Mode Domain Controller (this is never used but is required)"
+            }
+        },
+	"SafeModeAdminPassword": {
             "type": "securestring",
             "metadata": {
                 "description": "Admin user password for Safe Mode Domain Controller"
@@ -201,7 +207,7 @@
                                     "Password": "PrivateSettingsRef:AdminPassword"
                                 },
 				"SafeModeAdminCreds": {
-				     "UserName": "[parameters('adminUsername')]",
+				     "UserName": "[parameters('SafeModeUsername')]",
 				     "Password": "PrivateSettingsRef:SafeModeAdminPassword"
                    		}
                             }
