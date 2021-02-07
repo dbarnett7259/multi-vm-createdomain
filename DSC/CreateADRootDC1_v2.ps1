@@ -3,7 +3,7 @@
     Param ( 
         [String]$DomainName,
         [PSCredential]$AdminCreds,
-        [PSCredential]$AdminSafemodeCreds,
+        [PSCredential]$SafeModeAdminCreds,
         [Int]$RetryCount = 30,
         [Int]$RetryIntervalSec = 120
     )
